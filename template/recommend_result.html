@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <title>Recommend</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ url_for('static', filename='search.js') }}"></script>
+    <style>
+
+      body{
+        background-color: #F3FFFD
+      }
+
+      .nav-item {
+        color: #006775
+      }
+
+      .header-image{
+        position: relative
+        width: 100%;
+        height: auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .header-image img{
+        padding-top: 100px;
+        padding-left: 200px;
+      }
+
+      .header-text {
+        color: #006775;
+        padding-top: 200px;
+      }
+
+      .header-text p {
+        font-size: 22px;
+        font-weight: bold;
+      }
+
+      .button-rec {
+        padding-top: 50px;
+      }
+
+      .button-rec button {
+        background-color: #006775;
+        color: white
+      }
+
+      .button-card button {
+        background-color: #006775;
+        color: white
+      }
+
+      .select-games {
+        color: #006775;
+        padding-top: 100px;
+        padding-bottom: 100px;
+      }
+
+      .row-cols-5 > * {
+        flex: 0 0 20%;
+        max-width: 20%;
+      }
+
+      .custom-card {
+        width: 80%;
+        margin-bottom: 10px;
+      }
+
+      ul.search-results {
+        list-style-type: none;
+        padding: 0;
+      }
+
+      .popular {
+        color: #006775;
+        padding-top: 200px;
+        padding-bottom: 100px;
+      }
+
+    </style>
+</head>
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav mx-auto">
+        <a class="nav-item nav-link" href="{{ url_for('home') }}">Home</a>
+        <a class="nav-item nav-link" href="{{ url_for('game_list', page=1) }}">Game List</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+      <div class="row">
+          <div class="col-md-6 text-center">
+              <div class="select-games">
+                  <h2>Your Game(s):</h2>
+                  <br>
+                  {% for i in input_data %}
+                    <h3>{{ i['name'] }}</h3>
+                  {% endfor %}
+              </div>
+          </div>
+
+          <div class="col-md-6 text-center">
+              <div class="select-games">
+                  <h2>Recommend again</h2>
+                  <div class="button-rec">
+                    <a href="{{ url_for('recommend') }}"><button type="button" class="btn">RECOMMEND ME!</button></a>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <div class="container">
+      <div class="text-center">
+          <div class="popular">
+              <h2>Recommendation for You:</h2>
+          </div>
+      </div>
+  </div>
+
+  <div class="container">
+      <div class="row row-cols-5">
+          {% for sim in similar_data %}
+            <div class="col custom-card">
+            <div class="card" style="height:280px">
+                <img class="card-img-top" src="{{ sim['header_image'] }}">
+                <div class="card-body">
+                    <p class="card-text">{{ sim['name'] }}</p>
+                    <p class="card-text">{{ sim['release_date'] }}</p>
+                </div>
+                <div class="card-footer text-center">
+                    <div class="button-card">
+                        <form action="/game-detail" method="GET">
+                        <input type="hidden" name="data" value="{{ sim }}">
+                        <button type="submit" class="btn">See details</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+          </div>
+          {% endfor %}
+      </div>
+  </div>
+
+
+</body>
+</html>

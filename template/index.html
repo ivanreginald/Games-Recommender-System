@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <h1>Pagination Example</h1>
+    <ul>
+    {% for item in items %}
+        <li>{{ item }}</li>
+    {% endfor %}
+    </ul>
+
+    <div class="pagination">
+        {% for p in range(1, num_pages + 1) %}
+            <a href="{{ url_for('paginate', page=p) }}">{{ p }}</a>
+        {% endfor %}
+</div>
+</ul>
+</head>
+<body>
+
+</body>
+</html>
