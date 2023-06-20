@@ -8,7 +8,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 app = Flask(__name__, template_folder='template', static_folder='static')
 steam_games = pd.read_csv('steam_games_final2.csv')
 
-@app.route('/home')
+@app.route('/home', methods=['GET', 'POST'])
 def home():
 
     sorted_games = steam_games.sort_values('positive_ratings', ascending=False)
@@ -17,7 +17,7 @@ def home():
 
     return render_template('home.html', data=best5_dict)
 
-@app.route('/game-list/<int:page>')
+@app.route('/game-list/<int:page>', methods=['GET', 'POST'])
 def game_list(page):
 
     sorted_games = steam_games.sort_values('name', ascending=True)
@@ -34,12 +34,12 @@ def game_list(page):
 
     return render_template('game_list.html', data=games_data, page=page, num_pages=num_pages)
 
-@app.route('/game-detail')
+@app.route('/game-detail', methods=['GET', 'POST'])
 def game_detail():
 
     df = pd.read_csv('similar_games_new.csv')
 
-    game_detail_data = request.args.get('data')
+    game_detail_data = request.form.get('data')
     data = ast.literal_eval(game_detail_data)
     similar = df[df['game_id'] == data['appid']]
     similar_list = ast.literal_eval(similar['similar_games'].iloc[0])
@@ -49,11 +49,11 @@ def game_detail():
 
     return render_template('game_detail.html', data=data, similar_data=similar_game_dict)
 
-@app.route('/recommend')
+@app.route('/recommend', methods=['GET', 'POST'])
 def recommend():
     return render_template('recommend.html')
 
-@app.route('/recommend/game')
+@app.route('/recommend/game', methods=['GET', 'POST'])
 def recommend_game():
     query = request.args.get('query')  # Retrieve the search query from the request
     game_list = steam_games['name'].to_list()
@@ -62,7 +62,7 @@ def recommend_game():
 
     return jsonify(results)
 
-@app.route('/recommend-result')
+@app.route('/recommend-result', methods=['GET', 'POST'])
 def recommend_result():
     input1 = request.args.get('game1')
     input2 = request.args.get('game2')
